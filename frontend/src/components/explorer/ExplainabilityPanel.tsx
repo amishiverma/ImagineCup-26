@@ -63,7 +63,7 @@ export function ExplainabilityPanel({
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.95, x: 20 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-xl glass-card rounded-2xl overflow-hidden"
+            className="w-full max-w-xl max-h-[85vh] glass-card rounded-2xl overflow-hidden flex flex-col"
           >
             {/* Header */}
             <div className="p-6 border-b border-border">
@@ -91,7 +91,7 @@ export function ExplainabilityPanel({
             </div>
 
             {/* Content */}
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-4 overflow-y-auto">
               {/* Root cause reference */}
               <div className="p-4 bg-secondary/30 border border-border/50 rounded-xl">
                 <p className="text-xs text-muted-foreground mb-1">
@@ -169,6 +169,17 @@ export function ExplainabilityPanel({
                     This insight follows Microsoft's Responsible AI principles
                   </p>
                 </div>
+
+                <div className="mt-4 p-3 border border-border rounded-lg text-xs text-muted-foreground">
+  <p><strong>Responsible AI Practices</strong></p>
+  <ul className="list-disc ml-4 mt-1 space-y-1">
+    <li>No personal data stored or inferred</li>
+    <li>Insights derived only from provided return data</li>
+    <li>Confidence scores are explainable and traceable</li>
+    <li>Human review required before applying fixes</li>
+  </ul>
+</div>
+
               </motion.div>
             </div>
           </motion.div>

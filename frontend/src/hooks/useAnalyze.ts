@@ -113,13 +113,22 @@ export function useAnalyze() {
     );
 
     const finalRootCauses =
-      backendRootCauses.length > 0
-        ? backendRootCauses
-        : csvReasons.map(reason => ({
-            reason,
-            confidence: 'medium',
-            status: 'open',
-          }));
+  backendRootCauses.length > 0
+    ? backendRootCauses.map(rc => ({
+        ...rc,
+        affected_products: normalized.returns
+          .filter(r => r.reason === rc.reason)
+          .map(r => r.sku),
+      }))
+    : csvReasons.map(reason => ({
+        reason,
+        confidence: 'medium',
+        status: 'open',
+        affected_products: normalized.returns
+          .filter(r => r.reason === reason)
+          .map(r => r.sku),
+      }));
+
 
     return {
       analysis,

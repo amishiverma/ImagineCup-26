@@ -15,6 +15,12 @@ export function AppLayout({ children }: AppLayoutProps) {
         <main className="p-6 min-h-[calc(100vh-4rem)]">
           {children}
         </main>
+        <footer className="border-t border-border mt-6 py-3 px-6">
+          <p className="text-xs text-muted-foreground text-center">
+            Powered by Azure OpenAI & Azure AI Language Services
+          </p>
+        </footer>
+
       </div>
     </div>
   );

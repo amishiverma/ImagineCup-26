@@ -8,14 +8,12 @@ interface AnalysisContextType {
   resetAnalysis: () => void;
 }
 
-const AnalysisContext = createContext<AnalysisContextType | undefined>(
-  undefined
-);
+const AnalysisContext = createContext<AnalysisContextType | undefined>(undefined);
 
 export function AnalysisProvider({ children }: { children: ReactNode }) {
   const [analysis, setAnalysis] = useState<any | null>(null);
 
-  // ✅ AppContext owns rootCauses (single source of truth)
+  // ✅ SINGLE SOURCE OF TRUTH
   const { setRootCauses, setIsDataLoaded } = useApp();
 
   const setAnalysisResult = (data: {
@@ -24,29 +22,33 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
   }) => {
     setAnalysis(data.analysis ?? null);
 
-    /**
-     * 🔥 SAFE + STRICT BACKEND → UI ADAPTER
-     */
     const adaptedRootCauses: RootCause[] = (data.rootCauses ?? [])
-  .filter(
-    (cause) =>
-      typeof cause?.reason === 'string' &&
-      cause.reason.trim().length > 0
-  )
-  .map((cause, idx) => ({
-    id: String(idx),
-    title: cause.reason, // ✅ NO fallback
-    description: 'AI-detected return pattern from customer feedback',
-    impact: 'high',
-    confidence: 85,
-    category: 'Returns',
-    affectedProducts: [],
-    evidenceSnippets: [],
-    recommendations: [],
-    detectedAt: new Date().toISOString(),
-    status: cause.status ?? 'new',
-  }));
+  .filter(c => typeof c?.reason === 'string' && c.reason.trim())
+  .map((cause, idx) => {
+    const sentiment = cause.sentiment_breakdown ?? {};
 
+    const negative = sentiment.negative ?? 0;
+    const neutral = sentiment.neutral ?? 0;
+
+    const frequencyBoost = Math.min(15, idx * 3); 
+    const confidence = Math.round(
+       Math.min(95, (negative * 100) + (neutral * 20) - frequencyBoost)
+      );
+
+    return {
+      id: String(idx),
+      title: cause.reason,
+      description: 'AI-detected return pattern from customer feedback',
+      impact: confidence > 75 ? 'high' : confidence > 55 ? 'medium' : 'low',
+      confidence,
+      category: 'Returns',
+      affectedProducts: cause.affected_products ?? [],
+      evidenceSnippets: cause.evidence ?? [],
+      recommendations: [],
+      detectedAt: new Date().toISOString(),
+      status: cause.status ?? 'new',
+    };
+  });
 
     setRootCauses(adaptedRootCauses);
     setIsDataLoaded(true);

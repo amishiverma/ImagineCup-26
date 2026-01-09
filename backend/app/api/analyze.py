@@ -23,12 +23,27 @@ def analyze(req: AnalyzeRequest):
 
     # Collect free-text reasons for language analysis
     texts = [
-        r.get("reason", "")
-        for r in req.returns
-        if r.get("reason")
-    ]
+    r.get("reason", "").strip()
+    for r in req.returns
+    if isinstance(r.get("reason"), str) and r.get("reason").strip()
+]
 
-    language_signals = extract_language_signals(texts)
+    if not texts:
+        language_signals = {
+        "sentiments": [],
+        "key_phrases": []
+    }
+    else:
+        try:
+            language_signals = extract_language_signals(texts)
+        except Exception as e:
+            print("⚠️ Azure Language failed, continuing:", e)
+            language_signals = {
+            "sentiments": [],
+            "key_phrases": []
+        }
+
+
 
     analysis_summary = analyze_returns(req.returns)
 

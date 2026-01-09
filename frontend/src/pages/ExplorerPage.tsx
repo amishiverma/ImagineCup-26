@@ -242,6 +242,19 @@ export default function ExplorerPage() {
                   <p className="text-sm text-muted-foreground mt-2">
                     {selectedRootCause.description}
                   </p>
+                  <div className="flex justify-between items-start">
+
+  <div className="flex gap-2">
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => setShowExplainPanel(true)}
+    >
+      Why AI?
+    </Button>
+  </div>
+</div>
+
                 </div>
 
                 {/* Content */}
