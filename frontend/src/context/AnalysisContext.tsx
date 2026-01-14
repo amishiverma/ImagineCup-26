@@ -13,7 +13,6 @@ const AnalysisContext = createContext<AnalysisContextType | undefined>(undefined
 export function AnalysisProvider({ children }: { children: ReactNode }) {
   const [analysis, setAnalysis] = useState<any | null>(null);
 
-  // ✅ SINGLE SOURCE OF TRUTH
   const { setRootCauses, setIsDataLoaded } = useApp();
 
   const setAnalysisResult = (data: {
