@@ -57,7 +57,7 @@ def get_root_causes() -> Dict[str, Any]:
             "confidence": "high",
             "status": "open",
 
-            # 🔥 REAL EXPLAINABILITY DATA
+            # REAL EXPLAINABILITY DATA
             "evidence": related_phrases[:5],
             "sentiment_breakdown": {
                 "negative": sentiment_counts.get("negative", 0) / total_sentiments,
